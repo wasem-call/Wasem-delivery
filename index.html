@@ -5,7 +5,6 @@
   <title>كابتن وسيم – خدمة توصيل</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- أيقونات Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
@@ -97,6 +96,11 @@
       color: #fff;
     }
 
+    .btn-direct {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
     .note {
       text-align: center;
       padding: 10px 20px 20px;
@@ -104,7 +108,6 @@
       color: #666;
     }
 
-    /* دائرة التحميل */
     #loader {
       display: none;
       width: 40px;
@@ -137,7 +140,6 @@
       رجاء تزويدنا بموقعك للوصول السريع
     </div>
 
-    <!-- دائرة التحميل -->
     <div id="loader"></div>
 
     <div class="image-box">
@@ -149,6 +151,12 @@
     </div>
 
     <div class="buttons">
+
+      <!-- زر إرسال الموقع إلى Google Sheet -->
+      <button class="btn btn-direct" onclick="sendLocationToSheet()">
+        📍 إرسال موقعي مباشرة
+      </button>
+
       <button class="btn btn-location" onclick="sendLocationSMS()">
         📍 مشاركة موقعي الآن عبر SMS
       </button>
@@ -157,6 +165,7 @@
         <i class="fab fa-whatsapp" style="font-size:20px; margin-left:6px;"></i>
         إرسال موقعي عبر واتساب
       </button>
+
     </div>
 
     <div class="note">
@@ -173,6 +182,32 @@
 
     function hideLoader() {
       document.getElementById("loader").style.display = "none";
+    }
+
+    /* زر إرسال الموقع إلى Google Sheet */
+    function sendLocationToSheet() {
+      showLoader();
+
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        hideLoader();
+
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        await fetch("https://script.google.com/macros/s/AKfycbx340j_UYgq3IhlDtqMirBTfOn9IT6kGDYEhvjZd2pP6KRR2gz3T8AeY8k0OwFi0dmn/exec", {
+          method: "POST",
+          body: JSON.stringify({
+            latitude: lat,
+            longitude: lon
+          })
+        });
+
+        alert("تم إرسال موقعك بنجاح ✔");
+      },
+      () => {
+        hideLoader();
+        alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+      });
     }
 
     function sendLocationSMS() {
