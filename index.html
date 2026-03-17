@@ -194,13 +194,12 @@
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
 
-        await fetch("https://script.google.com/macros/s/AKfycbx340j_UYgq3IhlDtqMirBTfOn9IT6kGDYEhvjZd2pP6KRR2gz3T8AeY8k0OwFi0dmn/exec", {
-          method: "POST",
-          body: JSON.stringify({
-            latitude: lat,
-            longitude: lon
-          })
-        });
+      await fetch("https://script.google.com/macros/s/AKfycbx340j_UYgq3IhlDtqMirBTfOn9IT6kGDYEhvjZd2pP6KRR2gz3T8AeY8k0OwFi0dmn/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    map_url: "https://www.google.com/maps?q=" + lat + "," + lon
+  })
+});
 
         alert("تم إرسال موقعك بنجاح ✔");
       },
