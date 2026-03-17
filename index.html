@@ -160,20 +160,24 @@
         return;
       }
 
-      navigator.geolocation.getCurrentPosition(
-        function (pos) {
-          var lat = pos.coords.latitude;
-          var lon = pos.coords.longitude;
+    navigator.geolocation.getCurrentPosition(
+  function (pos) {
+    var lat = pos.coords.latitude;
+    var lon = pos.coords.longitude;
 
-          var phone = "963958267694";
-          var message = "موقعي هو: " + lat + "," + lon;
+    var phone = "963958267694";
 
-          window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
-        },
-        function () {
-          alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
-        }
-      );
+    // رابط مباشر يفتح موقع المستخدم على الخريطة
+    var link = "https://www.google.com/maps?q=" + lat + "," + lon;
+
+    var message = "موقعي على الخريطة: " + link;
+
+    window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
+  },
+  function () {
+    alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+  }
+);
     }
   </script>
 
