@@ -100,18 +100,6 @@
       font-size: 13px;
       color: #666;
     }
-
-    @media (min-width: 768px) {
-      body {
-        padding-top: 40px;
-      }
-      .container {
-        max-width: 520px;
-      }
-      .header h1 {
-        font-size: 32px;
-      }
-    }
   </style>
 </head>
 
@@ -142,9 +130,9 @@
         📍 مشاركة موقعي الآن عبر SMS
       </button>
 
-      <a class="btn btn-whatsapp" href="https://wa.me/963958267694" target="_blank">
-        💬 التواصل عبر واتساب
-      </a>
+      <button class="btn btn-whatsapp" onclick="sendLocationWhatsApp()">
+        💬 إرسال موقعي عبر واتساب
+      </button>
     </div>
 
     <div class="note">
@@ -154,36 +142,55 @@
   </div>
 
   <script>
-   function sendLocationWhatsApp() {
-  if (!navigator.geolocation) {
-    alert("جهازك لا يدعم تحديد الموقع.");
-    return;
-  }
 
-  navigator.geolocation.getCurrentPosition(
-    function (pos) {
-      var lat = pos.coords.latitude;
-      var lon = pos.coords.longitude;
+    function sendLocationSMS() {
+      if (!navigator.geolocation) {
+        alert("جهازك لا يدعم تحديد الموقع.");
+        return;
+      }
 
-      // رابط خرائط Google
-      var link = "https://www.google.com/maps?q=" + lat + "," + lon;
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          var lat = pos.coords.latitude;
+          var lon = pos.coords.longitude;
 
-      // رقمك
-      var phone = "963958267694";
+          var phone = "963958267694";
+          var link = "https://www.google.com/maps?q=" + lat + "," + lon;
+          var message = "موقعي على الخريطة: " + link;
 
-      // الرسالة الجاهزة
-      var message = "موقعي على الخريطة: " + link;
-
-      // فتح واتساب مع الرسالة
-      window.location.href =
-        "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-    },
-    function () {
-      alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+          window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
+        },
+        function () {
+          alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+        }
+      );
     }
-  );
-}
+
+
+    function sendLocationWhatsApp() {
+      if (!navigator.geolocation) {
+        alert("جهازك لا يدعم تحديد الموقع.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          var lat = pos.coords.latitude;
+          var lon = pos.coords.longitude;
+
+          var link = "https://www.google.com/maps?q=" + lat + "," + lon;
+          var phone = "963958267694";
+          var message = "موقعي على الخريطة: " + link;
+
+          window.location.href =
+            "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+        },
+        function () {
+          alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+        }
+      );
     }
+
   </script>
 
 </body>
