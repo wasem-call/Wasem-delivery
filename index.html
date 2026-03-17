@@ -5,6 +5,9 @@
   <title>كابتن وسيم – خدمة توصيل</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- أيقونات Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
   <style>
     body {
       margin: 0;
@@ -100,6 +103,23 @@
       font-size: 13px;
       color: #666;
     }
+
+    /* دائرة التحميل */
+    #loader {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #ddd;
+      border-top: 5px solid #00b4d8;
+      border-radius: 50%;
+      margin: 15px auto;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 
@@ -117,6 +137,9 @@
       رجاء تزويدنا بموقعك للوصول السريع
     </div>
 
+    <!-- دائرة التحميل -->
+    <div id="loader"></div>
+
     <div class="image-box">
       <img src="cartoon Image.png" style="width:100%; border-radius:14px;">
     </div>
@@ -131,7 +154,8 @@
       </button>
 
       <button class="btn btn-whatsapp" onclick="sendLocationWhatsApp()">
-        💬 إرسال موقعي عبر واتساب
+        <i class="fab fa-whatsapp" style="font-size:20px; margin-left:6px;"></i>
+        إرسال موقعي عبر واتساب
       </button>
     </div>
 
@@ -143,14 +167,27 @@
 
   <script>
 
+    function showLoader() {
+      document.getElementById("loader").style.display = "block";
+    }
+
+    function hideLoader() {
+      document.getElementById("loader").style.display = "none";
+    }
+
     function sendLocationSMS() {
+      showLoader();
+
       if (!navigator.geolocation) {
         alert("جهازك لا يدعم تحديد الموقع.");
+        hideLoader();
         return;
       }
 
       navigator.geolocation.getCurrentPosition(
         function (pos) {
+          hideLoader();
+
           var lat = pos.coords.latitude;
           var lon = pos.coords.longitude;
 
@@ -161,20 +198,25 @@
           window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
         },
         function () {
+          hideLoader();
           alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
         }
       );
     }
 
-
     function sendLocationWhatsApp() {
+      showLoader();
+
       if (!navigator.geolocation) {
         alert("جهازك لا يدعم تحديد الموقع.");
+        hideLoader();
         return;
       }
 
       navigator.geolocation.getCurrentPosition(
         function (pos) {
+          hideLoader();
+
           var lat = pos.coords.latitude;
           var lon = pos.coords.longitude;
 
@@ -186,6 +228,7 @@
             "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
         },
         function () {
+          hideLoader();
           alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
         }
       );
