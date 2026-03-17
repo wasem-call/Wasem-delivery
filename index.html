@@ -193,7 +193,7 @@
 
           var phone = "963958267694";
           var link = "https://www.google.com/maps?q=" + lat + "," + lon;
-          var message = " موقعي على الخريطة اضغط ارسال فقط : " + link;
+          var message = " موقعك على الخريطة اضغط ارسال فقط : " + link;
 
           window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
         },
@@ -222,7 +222,7 @@
 
           var link = "https://www.google.com/maps?q=" + lat + "," + lon;
           var phone = "963958267694";
-          var message = " موقعي على الخريطة اضغط ارسال فقط: " + link;
+          var message = " موقعك على الخريطة اضغط ارسال فقط: " + link;
 
           window.location.href =
             "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
