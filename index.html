@@ -163,6 +163,9 @@
   </div>
 
   <script>
+    const SUPABASE_URL = "https://ltjchzpzujchzwbgcgnt.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0amNoenB6dWpjaHp3YmdjZ250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3OTQ0OTksImV4cCI6MjA4OTM3MDQ5OX0.AY1BQp4z8-G8aZTFdHafmWvIkpsusE1RgaUhvIlHCtU";
+    const SUPABASE_TABLE = "order";
 
     function showLoader() {
       document.getElementById("loader").style.display = "block";
@@ -212,14 +215,26 @@
         navigator.geolocation.getCurrentPosition(sendNow);
         return;
       }
+      if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "PUT_YOUR_SUPABASE_ANON_KEY_HERE") {
+        hideLoader();
+        alert("ضع SUPABASE_ANON_KEY داخل الملف أولاً");
+        return;
+      }
 
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
+      const mapLink = "https://www.google.com/maps?q=" + lat + "," + lon;
 
-      fetch("https://script.google.com/macros/s/AKfycbzOWiCC0M_4R07IaZWxox9EMU-7jeDGApL819W86JLFvinwon574wc66vc7HfCdrrMU/exec", {
+      fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
         method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
         body: JSON.stringify({
-          map_url: "https://www.google.com/maps?q=" + lat + "," + lon
+          Url: mapLink
         })
       }).then(() => {
         hideLoader();
