@@ -335,7 +335,7 @@
         }
         hideLoader();
         const accuracy = Math.round(position.coords.accuracy || 0);
-        alert(`تم إرسال موقعك ✔ (الدقة ~ ${accuracy}m)`);
+        alert(`تم إرسال موقعك ✔`);
       }).catch((error) => {
         hideLoader();
         alert("فشل الإرسال: " + error.message);
